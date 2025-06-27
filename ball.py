@@ -7,7 +7,7 @@ class Ball(Turtle):
     def __init__(self):
         super().__init__()
         self.shape('circle')
-        self.color('green')
+        self.color('white')
         self.penup()
         self.x_move = MOVE_DIST
         self.y_move = MOVE_DIST

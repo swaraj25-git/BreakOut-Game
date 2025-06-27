@@ -2,6 +2,9 @@
 
 import turtle as tr
 from paddle import Paddle
+from ball import Ball
+from bricks import Bricks
+import time
 
 
 # print('Hello')
@@ -43,12 +46,98 @@ win.bgcolor('Black')
 win.title('BreakOut!')
 win.tracer(0)
 
+
 paddle = Paddle()
+ball = Ball()
+bricks = Bricks()
+
+playing_game = True
+
 win.listen()
 win.onkey(key='Left',fun=paddle.move_left)
 win.onkey(key='Right',fun=paddle.move_right)
 
-win.update()
+def check_collision_with_walls():
+    global ball
+
+    if ball.xcor() < -580 or ball.xcor() >570:
+        ball.bounce(x_bounce=True, y_bounce=False)
+        return
+
+    if ball.ycor() > 270:
+        ball.bounce(x_bounce=False, y_bounce=True)
+        return
+
+def check_collision_with_bricks():
+    global ball,bricks
+    for brick in bricks.bricks:
+        if ball.distance(brick) < 40:
+            brick.quantity-=1
+            if brick.quantity ==0:
+                brick.clear()
+                brick.goto(3000,3000)
+                bricks.bricks.remove(brick)
+
+            if ball.xcor() < brick.left_wall:
+                ball.bounce(x_bounce=True, y_bounce=False)
+
+            elif ball.xcor() > brick.right_wall:
+                ball.bounce(x_bounce=True,y_bounce=False)
+
+#             from bottom
+            elif ball.ycor() < brick.bottom_wall:
+                ball.bounce(x_bounce=False, y_bounce=True)
+
+            elif ball.ycor() > brick.upper_wall:
+                ball.bounce(x_bounce=False, y_bounce=True)
+
+def check_collision_with_paddle():
+    global ball, paddle
+    paddle_x = paddle.xcor()
+    ball_x = ball.xcor()
+
+
+    if ball.distance(paddle) < 110 and ball.ycor() < -250:
+#         if paddle right of screen
+        if paddle_x > 0:
+            if ball_x > paddle_x:
+                ball.bounce(x_bounce=True, y_bounce=True)
+                return
+            else:
+                ball.bounce(x_bounce=False, y_bounce=True)
+                return
+        #if paddle on left of screen
+        elif paddle_x < 0:
+            if ball_x < paddle_x:
+                ball.bounce(x_bounce=True, y_bounce=True)
+                return
+            else:
+                ball.bounce(x_bounce=False, y_bounce=True)
+                return
+
+        else:
+            if ball_x > paddle_x:
+                ball.bounce(x_bounce=True, y_bounce=True)
+                return
+            elif ball_x < paddle_x:
+                ball.bounce(x_bounce=True,y_bounce=True)
+                return
+            else:
+                ball.bounce(x_bounce=False, y_bounce=True)
+                return
+
+
+
+
+
+while playing_game:
+    win.update()
+    time.sleep(0.09)
+    ball.move()
+
+    check_collision_with_walls()
+    check_collision_with_paddle()
+    check_collision_with_bricks()
 
 
 

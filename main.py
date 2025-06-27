@@ -1,7 +1,7 @@
 
 
 import turtle as tr
-
+from paddle import Paddle
 
 
 # print('Hello')
@@ -41,6 +41,17 @@ win  = tr.Screen()
 win.setup(width=1200, height=600)
 win.bgcolor('Black')
 win.title('BreakOut!')
+win.tracer(0)
+
+paddle = Paddle()
+win.listen()
+win.onkey(key='Left',fun=paddle.move_left)
+win.onkey(key='Right',fun=paddle.move_right)
+
+win.update()
+
+
+
 
 tr.mainloop()
 

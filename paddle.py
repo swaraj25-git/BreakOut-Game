@@ -14,10 +14,10 @@ class Paddle(Turtle):
     def __init__(self):
         super().__init__()
         self.color('Blue')
-        self.shape('Square')
+        self.shape('square')
         self.penup()
         self.shapesize(stretch_wid=1,stretch_len=10)
-        self.goto(x=0,y=280)
+        self.goto(x=0,y=-280)
 
 
     def move_left(self):
